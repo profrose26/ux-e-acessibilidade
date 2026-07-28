@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sênior Seguro - Guia Acessível de Segurança Digital</title>
+  
+  <!-- Importando fontes de alta legibilidade -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Paleta Padrão (Modo Claro) */
+      --bg-principal: #f4f7fb;
+      --bg-cartao: #ffffff;
+      --bg-cartao-alt: #eef2f8;
+      --bg-cabecalho: #0f4c81;
+      --texto-cabecalho: #ffffff;
+      --texto-principal: #1e293b;
+      --texto-secundario: #475569;
+      --cor-primaria: #0284c7;
+      --cor-primaria-hover: #0369a1;
+      --alerta-atencao: #b45309;
+      --alerta-atencao-bg: #fef3c7;
+      --alerta-atencao-borda: #f59e0b;
+      --alerta-perigo: #b91c1c;
+      --alerta-perigo-hover: #991b1b;
+      --alerta-perigo-bg: #fee2e2;
+      --alerta-sucesso: #15803d;
+      --alerta-sucesso-bg: #dcfce7;
+      --cor-borda: #cbd5e1;
+      --sombra-p: 0 2px 8px rgba(0,0,0,0.06);
+      --sombra-m: 0 4px 14px rgba(0,0,0,0.1);
+      --sombra-g: 0 8px 24px rgba(0,0,0,0.12);
+      
+      /* Escala de Fonte */
+      --escala-fonte: 1;
+      --fonte-base: calc(18px * var(--escala-fonte));
+      --fonte-grande: calc(22px * var(--escala-fonte));
+      --fonte-maior: calc(26px * var(--escala-fonte));
+      --fonte-titulo: calc(34px * var(--escala-fonte));
+    }
+
+    /* MODO ESCURO */
+    #theme-dark:checked ~ .envoltorio-app {
+      --bg-principal: #0f172a;
+      --bg-cartao: #1e293b;
+      --bg-cartao-alt: #334155;
+      --bg-cabecalho: #0284c7;
+      --texto-cabecalho: #ffffff;
+      --texto-principal: #f8fafc;
+      --texto-secundario: #cbd5e1;
+      --cor-primaria: #38bdf8;
+      --cor-primaria-hover: #7dd3fc;
+      --alerta-atencao: #fde047;
+      --alerta-atencao-bg: #451a03;
+      --alerta-atencao-borda: #d97706;
+      --alerta-perigo: #fca5a5;
+      --alerta-perigo-hover: #f87171;
+      --alerta-perigo-bg: #450a0a;
+      --cor-borda: #475569;
+    }
+
+    /* MODO ALTO CONTRASTE */
+    #theme-contrast:checked ~ .envoltorio-app {
+      --bg-principal: #000000;
+      --bg-cartao: #000000;
+      --bg-cartao-alt: #1a1a1a;
+      --bg-cabecalho: #ffff00;
+      --texto-cabecalho: #000000;
+      --texto-principal: #ffffff;
+      --texto-secundario: #ffff00;
+      --cor-primaria: #ffff00;
+      --cor-primaria-hover: #ffffff;
+      --alerta-atencao: #ffff00;
+      --alerta-atencao-bg: #000000;
+      --alerta-atencao-borda: #ffff00;
+      --alerta-perigo: #ff5555;
+      --alerta-perigo-hover: #ff0000;
+      --alerta-perigo-bg: #330000;
+      --cor-borda: #ffff00;
+    }
+
+    /* AJUSTE DE TAMANHO DE FONTE */
+    #size-medium:checked ~ .envoltorio-app { --escala-fonte: 1.15; }
+    #size-large:checked ~ .envoltorio-app { --escala-fonte: 1.35; }
+
+    .controle-estado { display: none; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Lexend', 'Open Sans', sans-serif; background-color: #000; color: #1e293b; line-height: 1.6; overflow-x: hidden; }
+
+    .envoltorio-app {
+      background-color: var(--bg-principal);
+      color: var(--texto-principal);
+      min-height: 100vh;
+      font-size: var(--fonte-base);
+      transition: all 0.3s ease;
+      padding-bottom: 60px;
+    }
+
+    .barra-acessibilidade {
+      background-color: #1e293b; color: #ffffff; padding: 12px 20px;
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;
+      border-bottom: 2px solid var(--cor-borda); position: sticky; top: 0; z-index: 1000;
+    }
+
+    .grupo-acessibilidade { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .rotulo-acessibilidade { font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 6px; color: #f8fafc; }
+    .grupo-botoes-acessibilidade { display: flex; gap: 6px; background-color: #0f172a; padding: 4px; border-radius: 10px; border: 1px solid #475569; }
+    .botao-acessibilidade {
+      padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem;
+      background: transparent; color: #ffffff; border: 2px solid transparent; min-height: 44px;
+    }
+    .botao-acessibilidade:hover { background-color: rgba(255, 255, 255, 0.15); }
+
+    /* ESTADO ATIVO DOS BOTOES DE ACESSIBILIDADE */
+    #theme-light:checked ~ .envoltorio-app .botao-tema-claro,
+    #theme-dark:checked ~ .envoltorio-app .botao-tema-escuro,
+    #theme-contrast:checked ~ .envoltorio-app .botao-tema-contraste,
+    #size-normal:checked ~ .envoltorio-app .botao-tamanho-normal,
+    #size-medium:checked ~ .envoltorio-app .botao-tamanho-medio,
+    #size-large:checked ~ .envoltorio-app .botao-tamanho-grande {
+      background-color: #0284c7; color: #ffffff; border-color: #ffffff;
+    }
+    #theme-contrast:checked ~ .envoltorio-app .botao-tema-contraste {
+      background-color: #ffff00; color: #000000; border-color: #ffffff;
+    }
+
+    .cabecalho { background-color: var(--bg-cabecalho); color: var(--texto-cabecalho); padding: 25px 20px; text-align: center; }
+    .conteudo-cabecalho { max-width: 1100px; margin: 0 auto; }
+    .cabecalho h1 { font-size: var(--fonte-titulo); font-weight: 800; }
+    
+    .banner-destaque {
+      background-color: var(--bg-cartao);
+      border: 3px solid var(--cor-borda);
+      border-radius: 16px;
+      max-width: 1100px;
+      margin: 20px auto;
+      padding: 30px;
+      text-align: center;
+      box-shadow: var(--sombra-m);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+    .banner-destaque h2 { font-size: var(--fonte-titulo); color: var(--texto-principal); }
+    .banner-destaque p { font-size: var(--fonte-grande); color: var(--texto-secundario); max-width: 800px; }
+    
+    .botao-ajuda-banner {
+      background-color: var(--alerta-perigo);
+      color: #ffffff;
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-size: var(--fonte-maior);
+      font-weight: 800;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 6px 12px rgba(220, 38, 38, 0.3);
+      border: 4px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      transition: transform 0.2s;
+    }
+    .botao-ajuda-banner:hover {
+      background-color: var(--alerta-perigo-hover);
+      transform: scale(1.05);
+    }
+    #theme-contrast:checked ~ .envoltorio-app .botao-ajuda-banner {
+      border-color: #ffffff; color: #ffffff;
+    }
+
+    .navegacao-abas {
+      background-color: var(--bg-cartao);
+      border-bottom: 2px solid var(--cor-borda);
+      box-shadow: var(--sombra-p);
+      position: sticky;
+      top: 66px;
+      z-index: 900;
+    }
+    .container-navegacao { max-width: 1100px; margin: 0 auto; display: flex; overflow-x: auto; padding: 0 10px; }
+    .item-navegacao {
+      padding: 16px 22px; font-weight: 700; font-size: var(--fonte-base); color: var(--texto-secundario);
+      cursor: pointer; border-bottom: 4px solid transparent; white-space: nowrap;
+      display: flex; align-items: center; gap: 10px; min-height: 60px;
+    }
+    .item-navegacao:hover { color: var(--cor-primaria); background-color: rgba(2, 132, 199, 0.05); }
+
+    /* CONTROLE DAS ABAS ATIVAS */
+    #tab-dicas:checked ~ .envoltorio-app .aba-dicas,
+    #tab-golpes:checked ~ .envoltorio-app .aba-golpes,
+    #tab-direitos:checked ~ .envoltorio-app .aba-direitos,
+    #tab-ajuda:checked ~ .envoltorio-app .aba-ajuda {
+      color: var(--cor-primaria); border-bottom-color: var(--cor-primaria); background-color: rgba(2, 132, 199, 0.08);
+    }
+
+    .container-principal { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
+    .conteudo-aba { display: none; animation: aparecer 0.3s ease-in-out; }
+
+    @keyframes aparecer { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    #tab-dicas:checked ~ .envoltorio-app #content-dicas,
+    #tab-golpes:checked ~ .envoltorio-app #content-golpes,
+    #tab-direitos:checked ~ .envoltorio-app #content-direitos,
+    #tab-ajuda:checked ~ .envoltorio-app #content-ajuda {
+      display: block;
+    }
+
+    .cabecalho-secao { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 3px solid var(--cor-borda); }
+    .cabecalho-secao h2 { font-size: var(--fonte-titulo); color: var(--texto-principal); display: flex; align-items: center; gap: 12px; }
+    .cabecalho-secao p { font-size: var(--fonte-grande); color: var(--texto-secundario); margin-top: 6px; }
+
+    .grade-cartoes { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 24px; margin-top: 20px; }
+    .cartao {
+      background-color: var(--bg-cartao); border: 2px solid var(--cor-borda); border-radius: 16px;
+      padding: 26px; box-shadow: var(--sombra-p); display: flex; flex-direction: column; gap: 16px;
+    }
+    .cartao:hover { transform: translateY(-3px); box-shadow: var(--sombra-m); border-color: var(--cor-primaria); }
+    .etiqueta-cartao {
+      display: inline-flex; align-items: center; gap: 6px; background-color: var(--bg-cartao-alt);
+      color: var(--cor-primaria); font-weight: 700; padding: 6px 14px; border-radius: 20px; font-size: 0.9em; width: fit-content;
+    }
+    .titulo-cartao { font-size: var(--fonte-maior); font-weight: 700; color: var(--texto-principal); line-height: 1.3; }
+    .corpo-cartao { font-size: var(--fonte-base); color: var(--texto-secundario); }
+
+    .caixa-dica { background-color: var(--alerta-atencao-bg); border-left: 6px solid var(--alerta-atencao-borda); color: var(--texto-principal); padding: 16px; border-radius: 8px; margin-top: 10px; font-weight: 500; }
+    .caixa-dica strong { color: var(--alerta-atencao); display: block; margin-bottom: 4px; font-size: 1.05em; }
+
+    /* Sanfonas para a secao de Golpes */
+    details.sanfona-golpe { background-color: var(--bg-cartao); border: 2px solid var(--cor-borda); border-radius: 14px; margin-bottom: 18px; overflow: hidden; box-shadow: var(--sombra-p); }
+    details.sanfona-golpe summary {
+      padding: 20px; font-size: var(--fonte-maior); font-weight: 700; cursor: pointer; color: var(--texto-principal);
+      display: flex; align-items: center; justify-content: space-between; list-style: none; user-select: none;
+    }
+    details.sanfona-golpe summary::-webkit-details-marker { display: none; }
+    details.sanfona-golpe summary::after { content: '➕'; font-size: 1.2rem; }
+    details.sanfona-golpe[open] summary::after { content: '➖'; }
+    details.sanfona-golpe summary:hover { background-color: var(--bg-cartao-alt); color: var(--cor-primaria); }
+    .conteudo-sanfona { padding: 22px; border-top: 2px solid var(--cor-borda); background-color: var(--bg-principal); }
+    
+    .banner-alerta { background-color: var(--alerta-perigo-bg); border: 2px solid var(--alerta-perigo); color: var(--texto-principal); padding: 16px; border-radius: 10px; margin-bottom: 16px; font-weight: 600; }
+
+    /* Secao SOS */
+    .banner-sos { background-color: var(--alerta-perigo-bg); border: 3px solid var(--alerta-perigo); border-radius: 16px; padding: 30px; text-align: center; margin-bottom: 30px; }
+    .banner-sos h3 { font-size: var(--fonte-titulo); color: var(--alerta-perigo); margin-bottom: 10px; }
+    .contatos-sos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+    .cartao-contato-sos { background-color: var(--bg-cartao); border: 2px solid var(--cor-borda); border-radius: 12px; padding: 20px; }
+    .numero-sos { font-size: 1.4rem; font-weight: 800; color: var(--alerta-perigo); margin: 8px 0; display: block; }
+
+    /* Foco acessivel e Mobile */
+    :focus-visible { outline: 4px solid var(--cor-primaria); outline-offset: 2px; }
+    @media (max-width: 768px) {
+      .barra-acessibilidade { flex-direction: column; align-items: stretch; }
+      .grupo-acessibilidade { justify-content: space-between; }
+      .banner-destaque { margin: 15px; padding: 20px; }
+      .botao-ajuda-banner { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CONTROLES DE MODO VISUAL E TAMANHO -->
+  <input type="radio" name="theme-option" id="theme-light" class="controle-estado" checked>
+  <input type="radio" name="theme-option" id="theme-dark" class="controle-estado">
+  <input type="radio" name="theme-option" id="theme-contrast" class="controle-estado">
+
+  <input type="radio" name="size-option" id="size-normal" class="controle-estado" checked>
+  <input type="radio" name="size-option" id="size-medium" class="controle-estado">
+  <input type="radio" name="size-option" id="size-large" class="controle-estado">
+
+  <!-- SELECAO DE ABAS DE CONTEUDO -->
+  <input type="radio" name="tab-option" id="tab-dicas" class="controle-estado" checked>
+  <input type="radio" name="tab-option" id="tab-golpes" class="controle-estado">
+  <input type="radio" name="tab-option" id="tab-direitos" class="controle-estado">
+  <input type="radio" name="tab-option" id="tab-ajuda" class="controle-estado">
+
+  <div class="envoltorio-app">
+    
+    <!-- BARRA DE ACESSIBILIDADE FIXA -->
+    <header class="barra-acessibilidade" aria-label="Opções de Acessibilidade">
+      <div class="grupo-acessibilidade">
+        <span class="rotulo-acessibilidade">Tema visual:</span>
+        <div class="grupo-botoes-acessibilidade">
+          <label for="theme-light" class="botao-acessibilidade botao-tema-claro" tabIndex="0">☀️ Claro</label>
+          <label for="theme-dark" class="botao-acessibilidade botao-tema-escuro" tabIndex="0">🌙 Escuro</label>
+          <label for="theme-contrast" class="botao-acessibilidade botao-tema-contraste" tabIndex="0">👁️ Alto Contraste</label>
+        </div>
+      </div>
+
+      <div class="grupo-acessibilidade">
+        <span class="rotulo-acessibilidade">Tamanho do Texto:</span>
+        <div class="grupo-botoes-acessibilidade">
+          <label for="size-normal" class="botao-acessibilidade botao-tamanho-normal" tabIndex="0">Normal</label>
+          <label for="size-medium" class="botao-acessibilidade botao-tamanho-medio" tabIndex="0">A+ Grande</label>
+          <label for="size-large" class="botao-acessibilidade botao-tamanho-grande" tabIndex="0">A++ Extra</label>
+        </div>
+      </div>
+    </header>
+
+    <!-- CABEÇALHO DA APLICAÇÃO -->
+    <div class="cabecalho">
+      <div class="conteudo-cabecalho">
+        <h1>Sênior Seguro</h1>
+      </div>
+    </div>
+
+    <!-- BANNER DE DESTAQUE COM BOTÃO DE EMERGÊNCIA -->
+    <div class="banner-destaque">
+      <h2>Proteção e Segurança na Palma da Mão</h2>
+      <p>Navegue pelas abas abaixo para aprender a se proteger. Se desconfiar que caiu em um golpe, clique no botão vermelho imediatamente.</p>
+      
+      <label for="tab-ajuda" class="botao-ajuda-banner" tabIndex="0" role="button">
+        🚨 PRECISO DE AJUDA AGORA
+      </label>
+    </div>
+
+    <nav class="navegacao-abas" aria-label="Menu Principal de Conteúdo">
+      <div class="container-navegacao">
+        <label for="tab-dicas" class="item-navegacao aba-dicas" tabIndex="0">💡 Dicas Importantes</label>
+        <label for="tab-golpes" class="item-navegacao aba-golpes" tabIndex="0">⚠️ Identificar Golpes</label>
+        <label for="tab-direitos" class="item-navegacao aba-direitos" tabIndex="0">⚖️ Direitos na Internet</label>
+        <label for="tab-ajuda" class="item-navegacao aba-ajuda" tabIndex="0">🚨 Ajuda (SOS)</label>
+      </div>
+    </nav>
+
+    <main class="container-principal">
+
+      <!-- ABA 1: DICAS DE SEGURANÇA -->
+      <section id="content-dicas" class="conteudo-aba">
+        <div class="cabecalho-secao">
+          <h2>💡 Dicas Importantes de Segurança Digital</h2>
+          <p>Regras simples de ouro para usar a internet, o celular e o banco sem preocupações.</p>
+        </div>
+
+        <div class="grade-cartoes">
+          <article class="cartao">
+            <span class="etiqueta-cartao">📱 Mensagens de Texto</span>
+            <h3 class="titulo-cartao">A regra dos 6 dígitos do WhatsApp</h3>
+            <p class="corpo-cartao">Se alguém ligar ou mandar mensagem pedindo um número que chegou no seu SMS, não informe! Esse código é a chave para roubarem seu WhatsApp.</p>
+          </article>
+
+          <article class="cartao">
+            <span class="etiqueta-cartao">💸 Dinheiro Fácil</span>
+            <h3 class="titulo-cartao">Desconfie de promessas muito boas</h3>
+            <p class="corpo-cartao">"Você ganhou um prêmio!", "Resgate um dinheiro esquecido". Se pede para você clicar em um link ou pagar uma pequena taxa para receber muito, <strong>é fraude</strong>.</p>
+          </article>
+
+          <article class="cartao">
+            <span class="etiqueta-cartao">🔑 Privacidade</span>
+            <h3 class="titulo-cartao">Onde guardar suas senhas</h3>
+            <p class="corpo-cartao">Evite salvar senhas nas conversas do celular ou na capa de trás do aparelho. O ideal é anotar em um caderninho e guardá-lo em uma gaveta segura em casa.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="content-golpes" class="conteudo-aba">
+        <div class="cabecalho-secao">
+          <h2>⚠️ Como Identificar Possíveis Golpes no Dia a Dia</h2>
+          <p>Clique nas opções abaixo para entender as armadilhas mais comuns e como escapar delas.</p>
+        </div>
+
+        <details class="sanfona-golpe">
+          <summary><span>📱 O "Falso Filho" pedindo dinheiro</span></summary>
+          <div class="conteudo-sanfona">
+            <div class="banner-alerta">A tática: Alguém manda mensagem com a foto do seu filho dizendo: "Mãe/Pai, troquei de número, anota aí. Preciso de um Pix para pagar uma conta urgente".</div>
+            <p><strong>Como agir:</strong> Nunca faça o Pix na hora. Ligue (por voz ou vídeo) para o número antigo do seu filho para confirmar se é ele mesmo. Se a pessoa disser que não pode atender, é golpe.</p>
+          </div>
+        </details>
+
+        <details class="sanfona-golpe">
+          <summary><span>🏦 A Falsa Central do Banco</span></summary>
+          <div class="conteudo-sanfona">
+            <div class="banner-alerta">A tática: Você recebe uma ligação de um "atendente do banco" avisando que sua conta foi invadida e pede que você transfira seu dinheiro para uma "conta segura" ou passe sua senha.</div>
+            <p><strong>Como agir:</strong> Desligue o telefone. Bancos de verdade <strong>nunca</strong> ligam pedindo para você fazer transferências, Pix ou informando senhas.</p>
+          </div>
+        </details>
+
+        <details class="sanfona-golpe">
+          <summary><span>🎁 O Falso Entregador (Presente Supresa)</span></summary>
+          <div class="conteudo-sanfona">
+            <div class="banner-alerta">A tática: Chega alguém na sua porta com flores ou um bolo, dizendo ser um presente, mas exige que você pague apenas "uma taxa de entrega" na maquininha de cartão.</div>
+            <p><strong>Como agir:</strong> Não aceite nada que você não pediu. A maquininha do golpista geralmente está com a tela quebrada e cobra milhares de reais no seu cartão em vez de apenas a taxa.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ABA 3: DIREITOS NA INTERNET -->
+      <section id="content-direitos" class="conteudo-aba">
+        <div class="cabecalho-secao">
+          <h2>⚖️ Direitos na Internet e Leis de Proteção</h2>
+          <p>Você não está desamparado(a) no ambiente digital. Conheça as leis que garantem a sua segurança e privacidade.</p>
+        </div>
+
+        <div class="grade-cartoes">
+          <article class="cartao" style="border-left: 6px solid var(--cor-primaria);">
+            <h3 class="titulo-cartao">1. A Lei Geral de Proteção de Dados (LGPD)</h3>
+            <p class="corpo-cartao">
+              <strong>Seus dados são seus.</strong> Nenhuma empresa pode vender ou usar seu nome, CPF ou telefone sem a sua permissão clara. Você tem o direito de exigir que uma empresa apague suas informações dos sistemas dela a qualquer momento.
+            </p>
+          </article>
+
+          <article class="cartao" style="border-left: 6px solid var(--cor-primaria);">
+            <h3 class="titulo-cartao">2. Estatuto do Idoso no Ambiente Digital</h3>
+            <p class="corpo-cartao">
+              A lei garante atendimento prioritário à pessoa idosa. Em caso de fraudes bancárias ou problemas de consumo online, os bancos e delegacias devem priorizar o seu atendimento e a resolução do seu caso.
+            </p>
+          </article>
+
+          <article class="cartao" style="border-left: 6px solid var(--cor-primaria);">
+            <h3 class="titulo-cartao">3. Direito de Arrependimento (CDC)</h3>
+            <p class="corpo-cartao">
+              Fez uma compra pela internet e se arrependeu? Pelo Código de Defesa do Consumidor, <strong>você tem até 7 dias</strong> (após receber o produto) para devolver a mercadoria e receber seu dinheiro de volta, sem precisar justificar o motivo.
+            </p>
+          </article>
+
+          <article class="cartao" style="border-left: 6px solid var(--cor-primaria);">
+            <h3 class="titulo-cartao">4. Responsabilidade dos Bancos</h3>
+            <p class="corpo-cartao">
+              A justiça entende que os bancos devem garantir a segurança das contas. Se um golpista conseguir fazer um empréstimo no seu nome por falha de segurança do aplicativo do banco, a instituição financeira pode ser obrigada a cancelar a dívida.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="content-ajuda" class="conteudo-aba">
+        <div class="cabecalho-secao">
+          <h2>🚨 SOS: Fui Vítima de um Golpe, O Que Fazer?</h2>
+          <p>Mantenha a calma. Aja rapidamente seguindo os passos abaixo para proteger suas contas.</p>
+        </div>
+
+        <div class="banner-sos">
+          <h3>Agir rápido faz toda a diferença</h3>
+          <p>Os primeiros 30 minutos são os mais importantes para tentar bloquear o dinheiro.</p>
+        </div>
+
+        <div class="grade-cartoes" style="margin-bottom: 30px;">
+          <div class="cartao" style="border-left: 6px solid var(--alerta-perigo);">
+            <span class="etiqueta-cartao" style="color: var(--alerta-perigo);">Passo 1</span>
+            <h3 class="titulo-cartao">Avise seu Banco Imediatamente</h3>
+            <p class="corpo-cartao">Ligue para o banco usando o telefone impresso atrás do seu cartão físico. Peça o bloqueio de transferências, cartões e informe a fraude.</p>
+          </div>
+
+          <div class="cartao" style="border-left: 6px solid var(--alerta-perigo);">
+            <span class="etiqueta-cartao" style="color: var(--alerta-perigo);">Passo 2</span>
+            <h3 class="titulo-cartao">Faça o Boletim de Ocorrência (B.O.)</h3>
+            <p class="corpo-cartao">Isso é prova de que você foi vítima de crime. Pode ser feito de forma online pela Delegacia Eletrônica do seu estado ou indo presencialmente à delegacia.</p>
+          </div>
+
+          <div class="cartao" style="border-left: 6px solid var(--alerta-perigo);">
+            <span class="etiqueta-cartao" style="color: var(--alerta-perigo);">Passo 3</span>
+            <h3 class="titulo-cartao">Avise Amigos e Familiares</h3>
+            <p class="corpo-cartao">Se seu celular ou WhatsApp foi hackeado, peça para alguém próximo avisar todos os seus contatos que estão tentando pedir dinheiro no seu nome.</p>
+          </div>
+        </div>
+
+        <h3 style="font-size: var(--fonte-maior); margin-bottom: 15px;">Telefones Úteis:</h3>
+        <div class="contatos-sos">
+          <div class="cartao-contato-sos">
+            <h4>Polícia Militar</h4>
+            <span class="numero-sos">190</span>
+            <p>Para emergências de segurança.</p>
+          </div>
+          <div class="cartao-contato-sos">
+            <h4>Procon</h4>
+            <span class="numero-sos">151</span>
+            <p>Proteção aos seus direitos como consumidor.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- RODAPÉ -->
+    <footer class="rodape" style="text-align: center; padding: 20px; border-top: 2px solid var(--cor-borda); color: var(--texto-secundario); margin-top: 40px;">
+      <p><strong>Sênior Seguro</strong> - Educação e Segurança Digital Acessível.</p>
+    </footer>
+
+  </div>
+
+</body>
+</html>
